@@ -16,7 +16,6 @@
       overflow-x: hidden;
       color: #333;
     }
-    /* Added overflow hidden so that win animations are clipped to the game container */
     #game-container {
       width: 900px;
       max-width: 90%;
@@ -33,14 +32,16 @@
       margin-bottom: 20px;
     }
     
-    /* === LEVEL SELECTION SECTION === */
+    /* === LEVEL SELECTION & HOW TO PLAY (Top Left & Top Right) === */
     #level-selection {
-      margin-bottom: 20px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
       z-index: 6;
     }
     #level-selection button {
-      margin: 0 10px;
-      padding: 10px 20px;
+      margin: 0 5px;
+      padding: 10px 15px;
       font-size: 1em;
       font-weight: bold;
       border: none;
@@ -53,13 +54,28 @@
     #level-selection button.active {
       background-color: #e74c3c;
     }
+    #howToPlayBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 6;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      background-color: #1d3557;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      line-height: 30px;
+    }
     
     /* === BOAT CONTAINER (Scene) === */
     #boat-container {
       position: relative;
       width: 500px;
       height: 300px;
-      margin: 0 auto 20px;
+      margin: 60px auto 20px;
       transition: transform 0.5s ease-in-out;
       z-index: 3;
     }
@@ -89,7 +105,7 @@
       clip-path: polygon(0% 100%, 0% 0%, 100% 0%, 90% 100%);
       z-index: 3;
     }
-    /* Hull shadow: long, short rectangle inside the hull */
+    /* Hull shadow */
     .hull-shadow {
       position: absolute;
       bottom: 10px;
@@ -176,15 +192,15 @@
     }
     
     /* === WAVES === */
-    /* The waves container is a sibling of the boat container, positioned absolutely within the game container */
     #waves {
       position: absolute;
       left: 0;
       right: 0;
-      top: 240px;  /* Adjust so waves sit just behind and slightly below the hull */
-      height: 150px;  /* Taller for deeper waves */
+      top: 350px;
+      height: 150px;
       z-index: 2;
       overflow: hidden;
+      pointer-events: none;
     }
     .wave {
       position: absolute;
@@ -218,7 +234,7 @@
     
     /* === LETTERS KEYBOARD === */
     #letters {
-      margin-top: 20px;
+      margin-top: 45px;
       z-index: 6;
     }
     .letter-btn {
@@ -239,7 +255,7 @@
       cursor: not-allowed;
     }
     
-    /* === STRIKES & MUTE === */
+    /* === STRIKES & MUTE BUTTONS === */
     #strikes {
       margin-top: 20px;
       font-size: 1.2em;
@@ -266,7 +282,6 @@
     }
     
     /* === SEAGULL WIN ANIMATION === */
-    /* Now positioned absolutely within the game container so that it disappears behind it */
     #seagull-container {
       position: absolute;
       top: 20%;
@@ -326,12 +341,13 @@
   <div id="game-container">
     <h1>Don't Rock The Boat!</h1>
     
-    <!-- LEVEL SELECTION -->
+    <!-- LEVEL SELECTION & HOW TO PLAY -->
     <div id="level-selection">
       <button id="easyBtn" class="active">Easy</button>
       <button id="mediumBtn">Medium</button>
       <button id="hardBtn">Hard</button>
     </div>
+    <button id="howToPlayBtn">?</button>
     
     <!-- BOAT CONTAINER (Scene) -->
     <div id="boat-container">
@@ -382,6 +398,7 @@
   <audio id="wrongSound" src="wrongsound.mp3"></audio>
   <audio id="splashSound" src="Sinkingship.mp3"></audio>
   <audio id="bgSound" loop src="backgroundsound2.mp3"></audio>
+  <audio id="winSound" src="congratulationseffect.mp3"></audio>
   
   <script>
     /**********************************************************
@@ -456,17 +473,34 @@
      **********************************************************/
     let currentLevel = "easy"; // default level
     let themesLibrary = levels[currentLevel];
+    let lastPuzzleIndex = -1;
     
     function initGame() {
-      // Choose a random theme from the current level's library
-      let selectedTheme = themesLibrary[Math.floor(Math.random() * themesLibrary.length)];
+      // Remove any previous sink class so the boat resets
+      const boatContainer = document.getElementById('boat-container');
+      boatContainer.classList.remove('sink');
+      // Reset the boat's transform to ensure it is horizontal
+      boatContainer.style.transform = 'rotate(0deg)';
+      
+      // Clear overlays (if any)
+      document.getElementById('seagull-container').style.display = 'none';
+      document.getElementById('bubbles').innerHTML = '';
+      
+      // Choose a new puzzle index (different from the last, if possible)
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * themesLibrary.length);
+      } while (themesLibrary.length > 1 && newIndex === lastPuzzleIndex);
+      lastPuzzleIndex = newIndex;
+      
+      let selectedTheme = themesLibrary[newIndex];
       // Set the clue and code words
       window.wordFront = selectedTheme.words[0];
       window.wordBack = selectedTheme.words[1];
       document.getElementById('boat-name').textContent = selectedTheme.boatName;
-      // Reset guessed letters and strikes
-      window.frontRevealed = Array(wordFront.length).fill('_');
-      window.backRevealed = Array(wordBack.length).fill('_');
+      // Reset guessed letters and strikes using updated global variables
+      window.frontRevealed = Array(window.wordFront.length).fill('_');
+      window.backRevealed = Array(window.wordBack.length).fill('_');
       window.strikes = 0;
       // Update UI
       document.getElementById('word-left').textContent = frontRevealed.join(' ');
@@ -501,7 +535,7 @@
     document.getElementById('hardBtn').addEventListener('click', function(){ setLevel("hard"); });
     
     /**********************************************************
-     *                   AUDIO SETUP
+     * AUDIO SETUP
      **********************************************************/
     const correctSound = document.getElementById('correctSound');
     correctSound.volume = 0.4;
@@ -511,6 +545,8 @@
     splashSound.volume = 0.4;
     const bgSound = document.getElementById('bgSound');
     bgSound.volume = 0.2;
+    const winSound = document.getElementById('winSound');
+    winSound.volume = 0.4;
     
     let bgStarted = false;
     window.addEventListener('click', function startBG() {
@@ -521,7 +557,14 @@
     });
     
     /**********************************************************
-     *            UPDATE DISPLAY & BOAT TIPPING
+     * HOW TO PLAY BUTTON
+     **********************************************************/
+    document.getElementById('howToPlayBtn').addEventListener('click', function() {
+      alert("How to Play:\n\nGuess the letters to reveal two secret words that share a theme. Too many wrong guesses or too much imbalance will tip the boat and sink it. Choose a level, and enjoy the challenge!");
+    });
+    
+    /**********************************************************
+     * UPDATE DISPLAY & BOAT TIPPING
      **********************************************************/
     function updateDisplay() {
       document.getElementById('word-left').textContent = frontRevealed.join(' ');
@@ -546,21 +589,25 @@
     }
     
     /**********************************************************
-     *                   SINK THE BOAT
+     * SINK THE BOAT
      **********************************************************/
     function sinkBoat() {
       document.getElementById('boat-container').classList.add('sink');
       splashSound.play();
       bgSound.pause();
       createBubbles();
+      // Disable letter buttons until the player answers the popup
+      document.querySelectorAll('.letter-btn').forEach(btn => btn.disabled = true);
+      // After a delay, prompt the player to play again
       setTimeout(() => {
-        alert(`Boat sank! The words were: ${wordFront} and ${wordBack}`);
-        initGame();
+        if (confirm("The boat has sunk!\nDo you want to play again?")) {
+          initGame();
+        }
       }, 3000);
     }
     
     /**********************************************************
-     *               CREATE BUBBLES ON SINK
+     * CREATE BUBBLES ON SINK
      **********************************************************/
     function createBubbles() {
       const bubblesContainer = document.getElementById('bubbles');
@@ -575,29 +622,31 @@
     }
     
     /**********************************************************
-     *                   CHECK FOR WIN
+     * CHECK FOR WIN
      **********************************************************/
     function checkWin() {
       if (frontRevealed.join('') === wordFront && backRevealed.join('') === wordBack) {
         bgSound.pause();
+        winSound.play();
         showSeagull();
       }
     }
     
     /**********************************************************
-     *               DISPLAY SEAGULL ANIMATION
+     * DISPLAY SEAGULL ANIMATION
      **********************************************************/
     function showSeagull() {
       const seagullContainer = document.getElementById('seagull-container');
       seagullContainer.style.display = 'block';
       seagullContainer.addEventListener('animationend', function () {
-        alert("Congratulations! You've kept the boat balanced and saved it!");
-        initGame();
+        if (confirm("Congratulations! You've kept the boat balanced and saved it!\nDo you want to play again?")) {
+          initGame();
+        }
       });
     }
     
     /**********************************************************
-     *                HANDLE LETTER GUESSES
+     * HANDLE LETTER GUESSES
      **********************************************************/
     function guessLetter(letter, btn) {
       btn.disabled = true;
