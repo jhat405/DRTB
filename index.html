@@ -14,12 +14,12 @@
       padding: 20px;
       position: relative;
       overflow-x: hidden;
-      color: #333;
+      color: #0b3270;
     }
     #game-container {
       width: 900px;
       max-width: 90%;
-      background: white;
+      background: rgb(239, 252, 255);
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       text-align: center;
@@ -53,6 +53,24 @@
     }
     #level-selection button.active {
       background-color: #e74c3c;
+    }
+    /* Instructions overlay */
+    #instructionsOverlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      height: 300px;
+      margin-left: -200px;
+      margin-top: -150px;
+      background: #ddd;
+      padding: 20px;
+      box-shadow: 0 0 10px #333;
+      display: none;
+      z-index: 20;
+    }
+    #instructionsOverlay p {
+      margin: 10px 0;
     }
     #howToPlayBtn {
       position: absolute;
@@ -99,66 +117,81 @@
       bottom: 0;
       left: 50%;
       width: 400px;
-      height: 90px;
+      height: 80px;
       transform: translateX(-50%);
       background: #f4c430;
-      clip-path: polygon(0% 100%, 0% 0%, 100% 0%, 90% 100%);
+      clip-path: polygon(17% 100%, 0% 0%, 100% 0%, 83% 100%);
       z-index: 3;
     }
-    /* Hull shadow */
-    .hull-shadow {
+    /* Hull shadow 1 */
+    .hull-shadow1 {
       position: absolute;
       bottom: 10px;
-      left: 50%;
+      left: 47%;
       transform: translateX(-50%);
-      width: 320px;
-      height: 20px;
+      width: 180px;
+      height: 12px;
       background: rgba(0, 0, 0, 0.2);
       border-radius: 10px;
       z-index: 4;
     }
+        /* Hull shadow 2 */
+        .hull-shadow2 {
+      position: absolute;
+      bottom: 10px;
+      left: 67%;
+      transform: translateX(-10%);
+      width: 20px;
+      height: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      z-index: 4;
+    }
+  
     
     /* Mast and mast base */
     .mast {
       position: absolute;
-      bottom: 90px;
+      bottom: 80px;
       left: 50%;
       transform: translateX(-50%);
       width: 12px;
-      height: 180px;
+      height: 250px;
       background: #c8a653;
       z-index: 5;
     }
     .mast-base {
       position: absolute;
-      bottom: 90px;
+      bottom: 80px;
       left: 50%;
       transform: translateX(-50%);
       width: 70px;
-      height: 18px;
+      height: 30px;
       background: #e74c3c;
+      clip-path: polygon(28% 34%,72% 34%,100% 100%,0% 100%);
       z-index: 5;
     }
     
     /* Sails */
     .sail-left {
       position: absolute;
-      bottom: 108px;
-      left: calc(50% - 6px - 100px);
+      bottom: 125px;
+      left: calc(50% - 6px - 105px);
       width: 100px;
       height: 200px;
       background: #3a92c3;
-      clip-path: polygon(100% 0, 0 50%, 100% 100%);
+      clip-path: polygon(100% 0%,0% 100%,100% 100%);
       z-index: 4;
     }
     .sail-right {
       position: absolute;
-      bottom: 108px;
-      left: calc(50% + 6px);
-      width: 60px;
+      bottom: 125px;
+      left: calc(50% + 12px);
+      width: 80px;
       height: 140px;
       background: #3a92c3;
-      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      clip-path: polygon(0% 0%,0% 100%,100% 100%);
+
       z-index: 4;
     }
     
@@ -168,10 +201,10 @@
       bottom: 80px;
       font-size: 1.5em;
       font-weight: bold;
-      color: #fff;
-      text-shadow: 1px 1px 2px #000;
-      background: rgba(0,0,0,0.3);
-      padding: 5px 8px;
+      color: #1e4b7e;
+      text-shadow: 1px 1px 2px #615f5f;
+      background: rgba(0,0,0,0.1);
+      padding: 2px 5px;
       border-radius: 4px;
       z-index: 5;
     }
@@ -198,7 +231,6 @@
       right: 0;
       top: 350px;
       height: 150px;
-      z-index: 2;
       overflow: hidden;
       pointer-events: none;
     }
@@ -208,23 +240,26 @@
       width: 300%;
       height: 70px;
       border-radius: 50%;
-      animation: waveAnimation 4s infinite linear;
+      animation: waveAnimation 8s infinite linear;
     }
     .wave.wave1 {
       background: rgba(0, 100, 255, 0.5);
       opacity: 0.8;
+      z-index: 2;
     }
     .wave.wave2 {
       background: rgba(0, 80, 200, 0.4);
       opacity: 0.7;
-      animation-duration: 6s;
+      animation-duration: 12s;
       bottom: 10px;
+      z-index: 2;
     }
     .wave.wave3 {
       background: rgba(0, 120, 255, 0.3);
-      opacity: 0.6;
-      animation-duration: 5s;
-      bottom: 20px;
+      opacity: 0.4;
+      animation-duration: 10s;
+      bottom: 22px;
+      z-index: 10;
     }
     @keyframes waveAnimation {
       0% { transform: translateX(0) translateY(0); }
@@ -348,13 +383,23 @@
       <button id="hardBtn">Hard</button>
     </div>
     <button id="howToPlayBtn">?</button>
+
+    <div id="instructionsOverlay">
+       
+      <h2>How to Play</h2>
+      <p>Guess the letters to reveal two secret words that share a theme.</p>
+      <p>Too many wrong guesses or too much imbalance will tip the boat and sink it.</p>
+      <p>Choose a level, and enjoy the challenge!</p>
+      <button id="closeInstructions">Close</button>
+    </div>
     
     <!-- BOAT CONTAINER (Scene) -->
     <div id="boat-container">
       <div id="boat">
         <!-- Hull and hull shadow -->
         <div class="boat-hull"></div>
-        <div class="hull-shadow"></div>
+        <div class="hull-shadow1"></div>
+        <div class="hull-shadow2"></div>
         <!-- Mast and mast base -->
         <div class="mast"></div>
         <div class="mast-base"></div>
@@ -559,9 +604,9 @@
     /**********************************************************
      * HOW TO PLAY BUTTON
      **********************************************************/
-    document.getElementById('howToPlayBtn').addEventListener('click', function() {
+    /** document.getElementById('howToPlayBtn').addEventListener('click', function() {
       alert("How to Play:\n\nGuess the letters to reveal two secret words that share a theme. Too many wrong guesses or too much imbalance will tip the boat and sink it. Choose a level, and enjoy the challenge!");
-    });
+    }); **/
     
     /**********************************************************
      * UPDATE DISPLAY & BOAT TIPPING
@@ -686,7 +731,38 @@
       updateDisplay();
       checkWin();
     }
+    //Instructions Overlay Logic
+    const questionMark = document.getElementById("howToPlayBtn");
+    const instructionsOverlay = document.getElementById("instructionsOverlay");
+    const closeInstructions = document.getElementById("closeInstructions");
+    questionMark.addEventListener("click", () => {
+      instructionsOverlay.style.display = instructionsOverlay.style.display === "none" ? "block" : "none";
+    });
+    closeInstructions.addEventListener("click", hideInstructions);
+    function hideInstructions() {
+      instructionsOverlay.style.display = "none";
+    }
     
+    function addKeyboardInput() {
+  document.addEventListener('keydown', function(event) {
+    // Convert the key pressed to uppercase
+    const key = event.key.toUpperCase();
+    // Only process if it's a single letter A-Z
+    if (!/^[A-Z]$/.test(key)) return;
+    
+    // Find all letter buttons and trigger a click on the matching one (if available)
+    const letterButtons = document.querySelectorAll('.letter-btn');
+    letterButtons.forEach(btn => {
+      if (btn.textContent === key && !btn.disabled) {
+        btn.click();
+      }
+    });
+  });
+}
+
+// Call the function to enable keyboard input
+addKeyboardInput();
+
     // Initialize the game on page load using the default level
     initGame();
   </script>
