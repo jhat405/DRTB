@@ -57,10 +57,10 @@
     /* Instructions overlay */
     #instructionsOverlay {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 400px;
-      height: 300px;
+      top: 160px;
+      right: 10px;
+      width: 200px;
+      height: 360px;
       margin-left: -200px;
       margin-top: -150px;
       background: #ddd;
@@ -87,7 +87,15 @@
       cursor: pointer;
       line-height: 30px;
     }
-    
+    #close-instructions { 
+      font-size: 1em;
+      padding: 10px 20px;
+      border: none;
+      background-color: #1d3557;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;  
+    }
     /* === BOAT CONTAINER (Scene) === */
     #boat-container {
       position: relative;
@@ -307,7 +315,7 @@
       cursor: pointer;
       z-index: 6;
     }
-    
+
     /* === SINKING ANIMATION === */
     .sink {
       animation: sinkAnimation 2s forwards;
@@ -390,7 +398,7 @@
       <p>Guess the letters to reveal two secret words that share a theme.</p>
       <p>Too many wrong guesses or too much imbalance will tip the boat and sink it.</p>
       <p>Choose a level, and enjoy the challenge!</p>
-      <button id="closeInstructions">Close</button>
+      <button id="close-instructions">Close</button>
     </div>
     
     <!-- BOAT CONTAINER (Scene) -->
@@ -734,7 +742,7 @@
     //Instructions Overlay Logic
     const questionMark = document.getElementById("howToPlayBtn");
     const instructionsOverlay = document.getElementById("instructionsOverlay");
-    const closeInstructions = document.getElementById("closeInstructions");
+    const closeInstructions = document.getElementById("close-instructions");
     questionMark.addEventListener("click", () => {
       instructionsOverlay.style.display = instructionsOverlay.style.display === "none" ? "block" : "none";
     });
