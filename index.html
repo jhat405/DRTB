@@ -17,8 +17,11 @@
       color: #0b3270;
     }
     #game-container {
-      width: 900px;
-      max-width: 90%;
+      display: flex; /* Hide the game container until Play is clicked NOTE THAT THIS IS DISABLED */ 
+      width: 95%;
+      max-width: 95%;
+      height: 95%;
+      max-height: 95%;
       background: rgb(239, 252, 255);
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -28,6 +31,68 @@
       z-index: 2;
       overflow: hidden;
     }
+
+    /* Landing overlay styles */
+    
+#landing-overlay {
+  height: 400px;
+  width: 800px;
+  max-width: 90%;
+  background: rgb(239, 252, 255);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+  padding: 20px;
+  position: absolute; /* Position it relative to the body */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Make sure it sits above the game container */
+}
+
+#landing-overlay h1 {
+  position: relative;
+  margin-top: 190px;
+  margin-bottom: 40px;
+  color: #0b3270;
+}
+
+#landing-overlay button {
+  padding: 10px 20px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 5px;
+  background-color: #1d3557;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 40px;
+}
+#overlay-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  z-index: 900; /* Lower than the landing overlay */
+}
+
+#landing-overlay .landingphrase {
+  font-size: 1.2em; /* Smaller text */
+  color: #333;      /* Adjust color as needed */
+  margin-bottom: 30px; /* Spacing between the instructions and the play button */
+}
+#logo-boat {
+  width: 500px; /* Adjust to your desired logo size */
+  margin: 0 auto 10px;
+  position: relative;
+  margin-top: 170px;
+  transform: scale(0.5); /* Scale the boat logo down to 50% of its original size */
+  transform-origin: top center; /* Adjust the origin so it scales nicely */
+}
+
+    
     h1 {
       margin-bottom: 20px;
     }
@@ -87,7 +152,7 @@
       cursor: pointer;
       line-height: 30px;
     }
-    #close-instructions { 
+      #close-instructions { 
       font-size: 1em;
       padding: 10px 20px;
       border: none;
@@ -227,6 +292,7 @@
       transform: translateX(-50%);
       font-size: 1.4em;
       font-weight: bold;
+      font-style: italic;
       color: #2c3e50;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
       z-index: 5;
@@ -381,6 +447,28 @@
   </style>
 </head>
 <body>
+
+   <!-- White Background Overlay -->
+   <div id="overlay-bg"></div>
+
+  <!-- Landing Overlay -->
+<div id="landing-overlay">
+   <!-- Boat Logo: duplicate only the visual elements -->
+   <div id="logo-boat">
+    <div class="boat-hull"></div>
+    <div class="hull-shadow1"></div>
+    <div class="hull-shadow2"></div>
+    <div class="mast"></div>
+    <div class="mast-base"></div>
+    <div class="sail-left"></div>
+    <div class="sail-right"></div>
+  </div>
+  <h1>Don't Rock The Boat!</h1>
+  <p class="landingphrase">
+    Find the hidden words and keep the boat afloat.
+  </p>
+  <button id="play-button">Play</button>
+</div>
   <div id="game-container">
     <h1>Don't Rock The Boat!</h1>
     
@@ -415,7 +503,10 @@
         <div class="sail-left"></div>
         <div class="sail-right"></div>
         <!-- Theme name and code words on the deck -->
-        <div id="boat-name"></div>
+        <div id="boat-name">
+            <span id="epithet">Voyager of </span>
+            <span id="theme" style="filter: blur(5px); font-weight: normal;">[Theme]</span>
+        </div>
         <div id="word-left"></div>
         <div id="word-right"></div>
       </div>
@@ -459,65 +550,65 @@
      **********************************************************/
     const levels = {
       easy: [
-        { theme: "Fruit", boatName: "Fruit Lady", words: ["BANANA", "PAPAYA"] },
-        { theme: "Colors", boatName: "Color Spirit", words: ["YELLOW", "VIOLET"] },
-        { theme: "Metals", boatName: "Metal Star", words: ["SILVER", "COPPER"] },
-        { theme: "Oceans", boatName: "Ocean Queen", words: ["ARCTIC", "INDIAN"] },
-        { theme: "Animals", boatName: "Animal Rover", words: ["RABBIT", "MONKEY"] },
-        { theme: "Seasons", boatName: "Season Hope", words: ["WINTER", "AUTUMN"] },
-        { theme: "Birds", boatName: "Bird Dancer", words: ["PIGEON", "FALCON"] },
-        { theme: "Flowers", boatName: "Flower Jewel", words: ["TULIP", "DAISY"] },
-        { theme: "Rivers", boatName: "River Dream", words: ["THAMES", "AMAZON"] },
-        { theme: "Shapes", boatName: "Shape Hunter", words: ["CIRCLE", "SQUARE"] },
-        { theme: "Planets", boatName: "Planet Quest", words: ["SATURN", "URANUS"] },
-        { theme: "Gems", boatName: "Gem Glory", words: ["EMERALD", "DIAMOND"] },
-        { theme: "Trees", boatName: "Tree Spirit", words: ["BIRCH", "MAPLE"] },
-        { theme: "Insects", boatName: "Insect Wings", words: ["BEETLE", "HORNET"] },
-        { theme: "Grains", boatName: "Grain Charm", words: ["MILLET", "BARLEY"] },
-        { theme: "Herbs", boatName: "Herb Magic", words: ["BASIL", "THYME"] },
-        { theme: "Deserts", boatName: "Desert Dream", words: ["SAHARA", "MOJAVE"] },
-        { theme: "Spices", boatName: "Spice Spirit", words: ["TURMERIC", "CARDAMOM"] }
+        { theme: "Fruit", words: ["BANANA", "PAPAYA"] },
+        { theme: "Colors", words: ["YELLOW", "VIOLET"] },
+        { theme: "Metals", words: ["SILVER", "COPPER"] },
+        { theme: "Oceans", words: ["ARCTIC", "INDIAN"] },
+        { theme: "Animals", words: ["RABBIT", "MONKEY"] },
+        { theme: "Seasons", words: ["WINTER", "AUTUMN"] }, /**
+        { theme: "Birds", boatName: "Bird", words: ["PIGEON", "FALCON"] },
+        { theme: "Flowers", boatName: "Flower", words: ["TULIP", "DAISY"] },
+        { theme: "Rivers", boatName: "River", words: ["THAMES", "AMAZON"] },
+        { theme: "Shapes", boatName: "Shape", words: ["CIRCLE", "SQUARE"] },
+        { theme: "Planets", boatName: "Planet", words: ["SATURN", "URANUS"] },
+        { theme: "Gems", boatName: "Gem", words: ["EMERALD", "DIAMOND"] },
+        { theme: "Trees", boatName: "Tree", words: ["BIRCH", "MAPLE"] },
+        { theme: "Insects", boatName: "Insect", words: ["BEETLE", "HORNET"] },
+        { theme: "Grains", boatName: "Grain", words: ["MILLET", "BARLEY"] },
+        { theme: "Herbs", boatName: "Herb", words: ["BASIL", "THYME"] },
+        { theme: "Deserts", boatName: "Desert", words: ["SAHARA", "MOJAVE"] },
+        { theme: "Spices", boatName: "Spice", words: ["TURMERIC", "CARDAMOM"] }
       ],
       medium: [
-        { theme: "Fabrics", boatName: "Fabric Spirit", words: ["CORDUROY", "CASHMERE"] },
-        { theme: "Cheeses", boatName: "Cheese Explorer", words: ["RICOTTA", "CHEDDAR"] },
-        { theme: "Islands", boatName: "Island Drifter", words: ["ICELAND", "JAMAICA"] },
-        { theme: "Coffee", boatName: "Coffee Voyager", words: ["ARABICA", "ROBUSTA"] },
-        { theme: "Fish", boatName: "Fish Mariner", words: ["HERRING", "SARDINE"] },
-        { theme: "Storms", boatName: "Storm Hunter", words: ["CYCLONE", "TYPHOON"] },
-        { theme: "Mushrooms", boatName: "Mushroom Sailor", words: ["BUTTON", "OYSTER"] },
-        { theme: "Snakes", boatName: "Serpent Pursuer", words: ["COTTONMOUTH", "RATTLESNAKE"] },
-        { theme: "Painters", boatName: "Painter Ranger", words: ["MATISSE", "CEZANNE"] },
-        { theme: "Dances", boatName: "Dance Nomad", words: ["FLAMENCO", "FANDANGO"] },
-        { theme: "Planets", boatName: "Cosmic Voyager", words: ["CELESTIAL", "ASTRONAUT"] },
-        { theme: "Authors", boatName: "Author Sailor", words: ["BRONTE", "AUSTEN"] },
+        { theme: "Fabrics", boatName: "Fabric", words: ["CORDUROY", "CASHMERE"] },
+        { theme: "Cheeses", boatName: "Cheese", words: ["RICOTTA", "CHEDDAR"] },
+        { theme: "Islands", boatName: "Island", words: ["ICELAND", "JAMAICA"] },
+        { theme: "Coffee", boatName: "Coffee", words: ["ARABICA", "ROBUSTA"] },
+        { theme: "Fish", boatName: "Fish", words: ["HERRING", "SARDINE"] },
+        { theme: "Storms", boatName: "Storm", words: ["CYCLONE", "TYPHOON"] },
+        { theme: "Mushrooms", boatName: "Mushroom", words: ["BUTTON", "OYSTER"] },
+        { theme: "Snakes", boatName: "Serpent", words: ["COTTONMOUTH", "RATTLESNAKE"] },
+        { theme: "Painters", boatName: "Painter", words: ["MATISSE", "CEZANNE"] },
+        { theme: "Dances", boatName: "Dance", words: ["FLAMENCO", "FANDANGO"] },
+        { theme: "Planets", boatName: "Cosmic", words: ["CELESTIAL", "ASTRONAUT"] },
+        { theme: "Authors", boatName: "Author", words: ["BRONTE", "AUSTEN"] },
         { theme: "Birdsofprey", boatName: "Bird of Prey", words: ["OSPREY", "CONDOR"] },
         { theme: "Herbs", boatName: "Herbal Hunter", words: ["OREGANO", "PARSLEY"] },
-        { theme: "Mountains", boatName: "Mountain Ranger", words: ["EVEREST", "OLYMPUS"] },
-        { theme: "Forests", boatName: "Forest Explorer", words: ["REDWOOD", "CYPRESS"] },
-        { theme: "Desserts", boatName: "Dessert Seeker", words: ["BROWNIE", "CUPCAKE"] }
+        { theme: "Mountains", boatName: "Mountain", words: ["EVEREST", "OLYMPUS"] },
+        { theme: "Forests", boatName: "Forest", words: ["REDWOOD", "CYPRESS"] },
+        { theme: "Desserts", boatName: "Dessert", words: ["BROWNIE", "CUPCAKE"] }
       ],
       hard: [
-        { theme: "Greek Heroes", boatName: "Greek Voyager", words: ["HERCULES", "ACHILLES"] },
-        { theme: "Galaxies", boatName: "Galaxy Runner", words: ["ANDROMEDA", "WHIRLPOOL"] },
-        { theme: "Wines", boatName: "Wine Conqueror", words: ["RIESLING", "BORDEAUX"] },
-        { theme: "Composers", boatName: "Composer Spirit", words: ["BERLIOZ", "VIVALDI"] },
-        { theme: "Myths", boatName: "Mythic Drifter", words: ["PERSEUS", "THESEUS"] },
-        { theme: "Butterflies", boatName: "Butterfly Sailor", words: ["MONARCH", "ADMIRAL"] },
-        { theme: "Ancient Cities", boatName: "Ancient Nomad", words: ["BABYLON", "CARTHAGE"] },
-        { theme: "Reptiles", boatName: "Reptile Ranger", words: ["TERRAPIN", "TORTOISE"] },
-        { theme: "Cloud Types", boatName: "Cloud Explorer", words: ["CIRRUS", "CUMULUS"] },
-        { theme: "Philosophers", boatName: "Philosopher Ship", words: ["SOCRATES", "DIOGENES"] },
-        { theme: "Alpine Peaks", boatName: "Alpine Seeker", words: ["MATTERHORN", "WEISSHORN"] },
-        { theme: "Playwrights", boatName: "Drama Mariner", words: ["MARLOWE", "SOPHOCLES"] },
-        { theme: "Tropical Fruit", boatName: "Tropic Sailor", words: ["AVOCADO", "TAMARIND"] },
-        { theme: "Minerals", boatName: "Stone Hunter", words: ["OBSIDIAN", "DOLOMITE"] },
-        { theme: "Astronomers", boatName: "Stellar Seeker", words: ["GALILEO", "KEPLERS"] },
-        { theme: "Languages", boatName: "Tongue Drifter", words: ["MANDARIN", "JAPANESE"] },
-        { theme: "Corals", boatName: "Coral Spirit", words: ["STAGHORN", "ELKHORNS"] },
-        { theme: "Poets", boatName: "Verse Explorer", words: ["PETRARCH", "CHAUCERS"] },
-        { theme: "Artists", boatName: "Art Hunter", words: ["REMBRANDT", "DELACROIX"] },
-        { theme: "Volcanoes", boatName: "Fire Mariner", words: ["KRAKATOA", "VESUVIUS"] }
+        { theme: "Greek Heroes", boatName: "Greek", words: ["HERCULES", "ACHILLES"] },
+        { theme: "Galaxies", boatName: "Galaxy", words: ["ANDROMEDA", "WHIRLPOOL"] },
+        { theme: "Wines", boatName: "Wine", words: ["RIESLING", "BORDEAUX"] },
+        { theme: "Composers", boatName: "Composer", words: ["BERLIOZ", "VIVALDI"] },
+        { theme: "Myths", boatName: "Mythic", words: ["PERSEUS", "THESEUS"] },
+        { theme: "Butterflies", boatName: "Butterfly", words: ["MONARCH", "ADMIRAL"] },
+        { theme: "Ancient Cities", boatName: "Ancient", words: ["BABYLON", "CARTHAGE"] },
+        { theme: "Reptiles", boatName: "Reptile", words: ["TERRAPIN", "TORTOISE"] },
+        { theme: "Cloud Types", boatName: "Cloud", words: ["CIRRUS", "CUMULUS"] },
+        { theme: "Philosophers", boatName: "Philosopher", words: ["SOCRATES", "DIOGENES"] },
+        { theme: "Alpine Peaks", boatName: "Alpine", words: ["MATTERHORN", "WEISSHORN"] },
+        { theme: "Playwrights", boatName: "Drama", words: ["MARLOWE", "SOPHOCLES"] },
+        { theme: "Tropical Fruit", boatName: "Tropic", words: ["AVOCADO", "TAMARIND"] },
+        { theme: "Minerals", boatName: "Stone", words: ["OBSIDIAN", "DOLOMITE"] },
+        { theme: "Astronomers", boatName: "Stellar", words: ["GALILEO", "KEPLERS"] },
+        { theme: "Languages", boatName: "Tongue", words: ["MANDARIN", "JAPANESE"] },
+        { theme: "Corals", boatName: "Coral", words: ["STAGHORN", "ELKHORNS"] },
+        { theme: "Poets", boatName: "Verse", words: ["PETRARCH", "CHAUCERS"] },
+        { theme: "Artists", boatName: "Art", words: ["REMBRANDT", "DELACROIX"] },
+        { theme: "Volcanoes", boatName: "Fire", words: ["KRAKATOA", "VESUVIUS"] }*/
       ]
     };
     
@@ -550,7 +641,11 @@
       // Set the clue and code words
       window.wordFront = selectedTheme.words[0];
       window.wordBack = selectedTheme.words[1];
-      document.getElementById('boat-name').textContent = selectedTheme.boatName;
+      document.getElementById('boat-name').innerHTML =
+  '<span id="epithet">Voyager of </span>' +
+  '<span id="theme" style="filter: blur(5px); font-weight: normal;">' +
+  selectedTheme.theme +
+  '</span>';
       // Reset guessed letters and strikes using updated global variables
       window.frontRevealed = Array(window.wordFront.length).fill('_');
       window.backRevealed = Array(window.wordBack.length).fill('_');
@@ -772,7 +867,26 @@
 addKeyboardInput();
 
     // Initialize the game on page load using the default level
+    //* initGame(); *//
+
+   // Listen for the Play button click
+  document.getElementById("play-button").addEventListener("click", function() {
+    // Hide the landing overlay and white background overlay
+    document.getElementById("landing-overlay").style.display = "none";
+    document.getElementById("overlay-bg").style.display = "none";
+    // Show the game container
+    document.getElementById("game-container").style.display = "block";
+    // Initialize the game
     initGame();
+    setTimeout(function() {
+  const themeSpan = document.getElementById('theme');
+  if (themeSpan) {
+    themeSpan.style.filter = 'none';
+    themeSpan.style.fontWeight = 'bold';
+  }
+}, 2000);
+  });
+  
   </script>
 </body>
 </html>
