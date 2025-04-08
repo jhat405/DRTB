@@ -1,0 +1,392 @@
+#logo-boat {
+    width: 500px; /* Adjust to your desired logo size */
+    margin: 0 auto 10px;
+    position: relative;
+    margin-top: 170px;
+    transform: scale(0.5); /* Scale the boat logo down to 50% of its original size */
+    transform-origin: top center; /* Adjust the origin so it scales nicely */
+  }
+
+   /* === LEVEL SELECTION & HOW TO PLAY (Top Left & Top Right) === */
+   #level-selection {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 6;
+  }
+  #level-selection button {
+    margin: 0 5px;
+    padding: 10px 15px;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    background-color: #1d3557;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  #level-selection button.active {
+    background-color: #e74c3c;
+  }
+  /* Instructions overlay */
+  #instructionsOverlay {
+    position: absolute;
+    top: 160px;
+    right: 10px;
+    width: 200px;
+    height: 360px;
+    margin-left: -200px;
+    margin-top: -150px;
+    background: #ddd;
+    padding: 20px;
+    box-shadow: 0 0 10px #333;
+    display: none;
+    z-index: 20;
+  }
+  #instructionsOverlay p {
+    margin: 10px 0;
+  }
+  #howToPlayBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 6;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background-color: #1d3557;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+    line-height: 30px;
+  }
+    #close-instructions { 
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    background-color: #1d3557;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;  
+  }
+  /*pop ups*/
+    #popup {
+      position: absolute;
+      top: 50%;
+      right: 50%;
+      width: 300px;
+      height: 200px;
+      transform: translate(50%, -50%); 
+      background: #ddd;
+      padding: 20px;
+      box-shadow: 0 0 10px #333;
+      display: none;
+      z-index: 20;
+    }
+    #popup p {
+      margin: 10px 0;
+    }
+    #closePopup { 
+      font-size: 1em;
+      padding: 10px 20px;
+      border: none;
+      background-color: #1d3557;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;  
+    }
+    #popup:before {
+      position: fixed;  
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);  
+      z-index: 19;                 
+      pointer-events: none;   
+    }
+  /* === BOAT CONTAINER (Scene) === */
+  #boat-container {
+    position: relative;
+    width: 500px;
+    height: 300px;
+    margin: 60px auto 20px;
+    transition: transform 0.5s ease-in-out;
+    z-index: 3;
+  }
+  @keyframes bobbing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+  }
+  
+  /* === BOAT (Rotating element) === */
+  #boat {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    animation: bobbing 3s infinite ease-in-out;
+    z-index: 3;
+  }
+  
+  /* Hull */
+  .boat-hull {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 400px;
+    height: 80px;
+    transform: translateX(-50%);
+    background: #f4c430;
+    clip-path: polygon(17% 100%, 0% 0%, 100% 0%, 83% 100%);
+    z-index: 3;
+  }
+  /* Hull shadow 1 */
+  .hull-shadow1 {
+    position: absolute;
+    bottom: 10px;
+    left: 47%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 4;
+  }
+      /* Hull shadow 2 */
+      .hull-shadow2 {
+    position: absolute;
+    bottom: 10px;
+    left: 67%;
+    transform: translateX(-10%);
+    width: 20px;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 4;
+  }
+
+  
+  /* Mast and mast base */
+  .mast {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 250px;
+    background: #c8a653;
+    z-index: 5;
+  }
+  .mast-base {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 30px;
+    background: #e74c3c;
+    clip-path: polygon(28% 34%,72% 34%,100% 100%,0% 100%);
+    z-index: 5;
+  }
+  
+  /* Sails */
+  .sail-left {
+    position: absolute;
+    bottom: 125px;
+    left: calc(50% - 6px - 105px);
+    width: 100px;
+    height: 200px;
+    background: #3a92c3;
+    clip-path: polygon(100% 0%,0% 100%,100% 100%);
+    z-index: 4;
+  }
+  .sail-right {
+    position: absolute;
+    bottom: 125px;
+    left: calc(50% + 12px);
+    width: 80px;
+    height: 140px;
+    background: #3a92c3;
+    clip-path: polygon(0% 0%,0% 100%,100% 100%);
+
+    z-index: 4;
+  }
+  
+  /* Code words on the deck */
+  #word-left, #word-right {
+    position: absolute;
+    bottom: 80px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #1e4b7e;
+    text-shadow: 1px 1px 2px #615f5f;
+    background: rgba(0,0,0,0.1);
+    padding: 2px 5px;
+    border-radius: 4px;
+    z-index: 5;
+  }
+  #word-left { left: 25%; transform: translateX(-50%); }
+  #word-right { right: 25%; transform: translateX(50%); }
+  
+  /* Theme name on the hull */
+  #boat-name {
+    position: absolute;
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.4em;
+    font-weight: bold;
+    font-style: italic;
+    color: #2c3e50;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    z-index: 5;
+  }
+  
+  /* === WAVES === */
+  #waves {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 350px;
+    height: 150px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .wave {
+    position: absolute;
+    bottom: 0;
+    width: 300%;
+    height: 70px;
+    border-radius: 50%;
+    animation: waveAnimation 8s infinite linear;
+  }
+  .wave.wave1 {
+    background: rgba(0, 100, 255, 0.5);
+    opacity: 0.8;
+    z-index: 2;
+  }
+  .wave.wave2 {
+    background: rgba(0, 80, 200, 0.4);
+    opacity: 0.7;
+    animation-duration: 12s;
+    bottom: 10px;
+    z-index: 10;
+  }
+  .wave.wave3 {
+    background: rgba(0, 120, 255, 0.3);
+    opacity: 0.4;
+    animation-duration: 10s;
+    bottom: 22px;
+    z-index: 2;
+  }
+  @keyframes waveAnimation {
+    0% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(-25%) translateY(-5px); }
+    100% { transform: translateX(-50%) translateY(0); }
+  }
+  
+  /* === LETTERS KEYBOARD === */
+  #letters {
+    margin-top: 45px;
+    z-index: 6;
+  }
+  .letter-btn {
+    width: 45px;
+    height: 45px;
+    margin: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    background-color: #1d3557;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .letter-btn:disabled {
+    background-color: #a8a8a8;
+    cursor: not-allowed;
+  }
+  
+  /* === STRIKES & MUTE BUTTONS === */
+  #strikes {
+    margin-top: 20px;
+    font-size: 1.2em;
+    z-index: 6;
+  }
+  #mute {
+    margin-top: 10px;
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    background-color: #1d3557;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 6;
+  }
+
+  /* === SINKING ANIMATION === */
+  .sink {
+    animation: sinkAnimation 2s forwards;
+  }
+  @keyframes sinkAnimation {
+    to { transform: translateY(300px) rotate(90deg); opacity: 0; }
+  }
+  
+  /* === SEAGULL WIN ANIMATION === */
+  #seagull-container {
+    position: absolute;
+    top: 20%;
+    left: -150px;
+    display: none;
+    z-index: 1000;
+    animation: seagullFly 7s linear forwards;
+  }
+  #seagull {
+    width: 100px;
+    vertical-align: middle;
+  }
+  #speech-bubble {
+    display: inline-block;
+    background: #fff;
+    border: 2px solid #333;
+    border-radius: 10px;
+    padding: 10px;
+    margin-left: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    position: relative;
+  }
+  #speech-bubble::after {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 10px solid transparent;
+    border-right-color: #fff;
+  }
+  @keyframes seagullFly {
+    0% { left: -150px; opacity: 0; }
+    10% { opacity: 1; }
+    100% { left: calc(100% + 50px); opacity: 1; }
+  }
+  
+  /* === BUBBLES (for sinking animation) === */
+  .bubble {
+    position: absolute;
+    bottom: 0;
+    background: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: bubbleRise 3s ease-out forwards;
+    z-index: 7;
+  }
+  @keyframes bubbleRise {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-300px); opacity: 0; }
+  }
