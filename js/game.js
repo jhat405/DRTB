@@ -1,4 +1,4 @@
-import{addKeyboardInput, hideInstructions, sinkBoat, updateDisplay, popUpOverlay} from "./dom.js"
+import{addKeyboardInput, hideInstructions, sinkBoat, updateDisplay, failPopup, muteButton, successPopup} from "./dom.js"
 import { levels } from "./levels.js";
 import { checkWin } from "./utils.js";
 let currentLevel = "easy"; // default level
@@ -115,9 +115,11 @@ function setLevel(level) {
 function instructionsOverlay(){
   const questionMark = document.getElementById("howToPlayBtn");
     const instructionsOverlay = document.getElementById("instructionsOverlay");
+    instructionsOverlay.style.display = "none"
     const closeInstructions = document.getElementById("close-instructions");
     questionMark.addEventListener("click", () => {
-      instructionsOverlay.style.display = instructionsOverlay.style.display === "none" ? "block" : "none";
+      console.log('Clicked! IsMuted:');
+      instructionsOverlay.style.display = instructionsOverlay.style.display = "flex";
     });
     closeInstructions.addEventListener("click", hideInstructions);
 }
@@ -174,7 +176,9 @@ export function start() {
     //Instructions Overlay Logic
     
     instructionsOverlay()
-    popUpOverlay()
+    failPopup()
+    successPopup()
+    muteButton()
     
 
 
