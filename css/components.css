@@ -1,0 +1,35 @@
+  
+  #landing-overlay h1 {
+    position: relative;
+    margin-top: 190px;
+    margin-bottom: 40px;
+    color: #0b3270;
+  }
+  
+  #landing-overlay button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    background-color: #1d3557;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 40px;
+  }
+  #overlay-bg {
+    /* display: none; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    z-index: 900; /* Lower than the landing overlay */
+  }
+  
+  #landing-overlay .landingphrase {
+    font-size: 1.2em; /* Smaller text */
+    color: #333;      /* Adjust color as needed */
+    margin-bottom: 30px; /* Spacing between the instructions and the play button */
+  }
