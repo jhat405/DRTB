@@ -5,446 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Don't Rock The Boat!</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
-  <style>
-    /* === GLOBAL STYLES === */
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f0f0f0;
-      margin: 0;
-      padding: 20px;
-      position: relative;
-      overflow-x: hidden;
-      color: #0b3270;
-    }
-    #game-container {
-      display: flex; /* Hide the game container until Play is clicked NOTE THAT THIS IS DISABLED */ 
-      width: 95%;
-      max-width: 95%;
-      height: 95%;
-      max-height: 95%;
-      background: rgb(239, 252, 255);
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      text-align: center;
-      padding: 20px;
-      position: relative;
-      z-index: 2;
-      overflow: hidden;
-    }
-
-    /* Landing overlay styles */
-    
-#landing-overlay {
-  height: 400px;
-  width: 800px;
-  max-width: 90%;
-  background: rgb(239, 252, 255);
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  text-align: center;
-  padding: 20px;
-  position: absolute; /* Position it relative to the body */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000; /* Make sure it sits above the game container */
-}
-
-#landing-overlay h1 {
-  position: relative;
-  margin-top: 190px;
-  margin-bottom: 40px;
-  color: #0b3270;
-}
-
-#landing-overlay button {
-  padding: 10px 20px;
-  font-size: 1.2em;
-  border: none;
-  border-radius: 5px;
-  background-color: #1d3557;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-bottom: 40px;
-}
-#overlay-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: white;
-  z-index: 900; /* Lower than the landing overlay */
-}
-
-#landing-overlay .landingphrase {
-  font-size: 1.2em; /* Smaller text */
-  color: #333;      /* Adjust color as needed */
-  margin-bottom: 30px; /* Spacing between the instructions and the play button */
-}
-#logo-boat {
-  width: 500px; /* Adjust to your desired logo size */
-  margin: 0 auto 10px;
-  position: relative;
-  margin-top: 170px;
-  transform: scale(0.5); /* Scale the boat logo down to 50% of its original size */
-  transform-origin: top center; /* Adjust the origin so it scales nicely */
-}
-
-    
-    h1 {
-      margin-bottom: 20px;
-    }
-    
-    /* === LEVEL SELECTION & HOW TO PLAY (Top Left & Top Right) === */
-    #level-selection {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 6;
-    }
-    #level-selection button {
-      margin: 0 5px;
-      padding: 10px 15px;
-      font-size: 1em;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      background-color: #1d3557;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    #level-selection button.active {
-      background-color: #e74c3c;
-    }
-    /* Instructions overlay */
-    #instructionsOverlay {
-      position: absolute;
-      top: 160px;
-      right: 10px;
-      width: 200px;
-      height: 360px;
-      margin-left: -200px;
-      margin-top: -150px;
-      background: #ddd;
-      padding: 20px;
-      box-shadow: 0 0 10px #333;
-      display: none;
-      z-index: 20;
-    }
-    #instructionsOverlay p {
-      margin: 10px 0;
-    }
-    #howToPlayBtn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 6;
-      width: 30px;
-      height: 30px;
-      border: none;
-      border-radius: 50%;
-      background-color: #1d3557;
-      color: white;
-      font-size: 1.2em;
-      cursor: pointer;
-      line-height: 30px;
-    }
-      #close-instructions { 
-      font-size: 1em;
-      padding: 10px 20px;
-      border: none;
-      background-color: #1d3557;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;  
-    }
-    /* === BOAT CONTAINER (Scene) === */
-    #boat-container {
-      position: relative;
-      width: 500px;
-      height: 300px;
-      margin: 60px auto 20px;
-      transition: transform 0.5s ease-in-out;
-      z-index: 3;
-    }
-    @keyframes bobbing {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(5px); }
-    }
-    
-    /* === BOAT (Rotating element) === */
-    #boat {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      animation: bobbing 3s infinite ease-in-out;
-      z-index: 3;
-    }
-    
-    /* Hull */
-    .boat-hull {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      width: 400px;
-      height: 80px;
-      transform: translateX(-50%);
-      background: #f4c430;
-      clip-path: polygon(17% 100%, 0% 0%, 100% 0%, 83% 100%);
-      z-index: 3;
-    }
-    /* Hull shadow 1 */
-    .hull-shadow1 {
-      position: absolute;
-      bottom: 10px;
-      left: 47%;
-      transform: translateX(-50%);
-      width: 180px;
-      height: 12px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      z-index: 4;
-    }
-        /* Hull shadow 2 */
-        .hull-shadow2 {
-      position: absolute;
-      bottom: 10px;
-      left: 67%;
-      transform: translateX(-10%);
-      width: 20px;
-      height: 12px;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      z-index: 4;
-    }
-  
-    
-    /* Mast and mast base */
-    .mast {
-      position: absolute;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 12px;
-      height: 250px;
-      background: #c8a653;
-      z-index: 5;
-    }
-    .mast-base {
-      position: absolute;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 70px;
-      height: 30px;
-      background: #e74c3c;
-      clip-path: polygon(28% 34%,72% 34%,100% 100%,0% 100%);
-      z-index: 5;
-    }
-    
-    /* Sails */
-    .sail-left {
-      position: absolute;
-      bottom: 125px;
-      left: calc(50% - 6px - 105px);
-      width: 100px;
-      height: 200px;
-      background: #3a92c3;
-      clip-path: polygon(100% 0%,0% 100%,100% 100%);
-      z-index: 4;
-    }
-    .sail-right {
-      position: absolute;
-      bottom: 125px;
-      left: calc(50% + 12px);
-      width: 80px;
-      height: 140px;
-      background: #3a92c3;
-      clip-path: polygon(0% 0%,0% 100%,100% 100%);
-
-      z-index: 4;
-    }
-    
-    /* Code words on the deck */
-    #word-left, #word-right {
-      position: absolute;
-      bottom: 80px;
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #1e4b7e;
-      text-shadow: 1px 1px 2px #615f5f;
-      background: rgba(0,0,0,0.1);
-      padding: 2px 5px;
-      border-radius: 4px;
-      z-index: 5;
-    }
-    #word-left { left: 25%; transform: translateX(-50%); }
-    #word-right { right: 25%; transform: translateX(50%); }
-    
-    /* Theme name on the hull */
-    #boat-name {
-      position: absolute;
-      bottom: 35px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1.4em;
-      font-weight: bold;
-      font-style: italic;
-      color: #2c3e50;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-      z-index: 5;
-    }
-    
-    /* === WAVES === */
-    #waves {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 350px;
-      height: 150px;
-      overflow: hidden;
-      pointer-events: none;
-    }
-    .wave {
-      position: absolute;
-      bottom: 0;
-      width: 300%;
-      height: 70px;
-      border-radius: 50%;
-      animation: waveAnimation 8s infinite linear;
-    }
-    .wave.wave1 {
-      background: rgba(0, 100, 255, 0.5);
-      opacity: 0.8;
-      z-index: 2;
-    }
-    .wave.wave2 {
-      background: rgba(0, 80, 200, 0.4);
-      opacity: 0.7;
-      animation-duration: 12s;
-      bottom: 10px;
-      z-index: 2;
-    }
-    .wave.wave3 {
-      background: rgba(0, 120, 255, 0.3);
-      opacity: 0.4;
-      animation-duration: 10s;
-      bottom: 22px;
-      z-index: 10;
-    }
-    @keyframes waveAnimation {
-      0% { transform: translateX(0) translateY(0); }
-      50% { transform: translateX(-25%) translateY(-5px); }
-      100% { transform: translateX(-50%) translateY(0); }
-    }
-    
-    /* === LETTERS KEYBOARD === */
-    #letters {
-      margin-top: 45px;
-      z-index: 6;
-    }
-    .letter-btn {
-      width: 45px;
-      height: 45px;
-      margin: 5px;
-      font-size: 1em;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      background-color: #1d3557;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .letter-btn:disabled {
-      background-color: #a8a8a8;
-      cursor: not-allowed;
-    }
-    
-    /* === STRIKES & MUTE BUTTONS === */
-    #strikes {
-      margin-top: 20px;
-      font-size: 1.2em;
-      z-index: 6;
-    }
-    #mute {
-      margin-top: 10px;
-      font-size: 1em;
-      padding: 10px 20px;
-      border: none;
-      background-color: #1d3557;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 6;
-    }
-
-    /* === SINKING ANIMATION === */
-    .sink {
-      animation: sinkAnimation 2s forwards;
-    }
-    @keyframes sinkAnimation {
-      to { transform: translateY(300px) rotate(90deg); opacity: 0; }
-    }
-    
-    /* === SEAGULL WIN ANIMATION === */
-    #seagull-container {
-      position: absolute;
-      top: 20%;
-      left: -150px;
-      display: none;
-      z-index: 1000;
-      animation: seagullFly 7s linear forwards;
-    }
-    #seagull {
-      width: 100px;
-      vertical-align: middle;
-    }
-    #speech-bubble {
-      display: inline-block;
-      background: #fff;
-      border: 2px solid #333;
-      border-radius: 10px;
-      padding: 10px;
-      margin-left: 10px;
-      font-size: 1.2em;
-      font-weight: bold;
-      position: relative;
-    }
-    #speech-bubble::after {
-      content: "";
-      position: absolute;
-      left: -20px;
-      top: 50%;
-      transform: translateY(-50%);
-      border: 10px solid transparent;
-      border-right-color: #fff;
-    }
-    @keyframes seagullFly {
-      0% { left: -150px; opacity: 0; }
-      10% { opacity: 1; }
-      100% { left: calc(100% + 50px); opacity: 1; }
-    }
-    
-    /* === BUBBLES (for sinking animation) === */
-    .bubble {
-      position: absolute;
-      bottom: 0;
-      background: rgba(255,255,255,0.8);
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      animation: bubbleRise 3s ease-out forwards;
-      z-index: 7;
-    }
-    @keyframes bubbleRise {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-300px); opacity: 0; }
-    }
-  </style>
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -478,7 +40,15 @@
       <button id="mediumBtn">Medium</button>
       <button id="hardBtn">Hard</button>
     </div>
-    <button id="howToPlayBtn">?</button>
+    <div id="utilityButtons">
+      <button id="muteBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+          <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM18.584 5.106a.75.75 0 0 1 1.06 0c3.808 3.807 3.808 9.98 0 13.788a.75.75 0 0 1-1.06-1.06 8.25 8.25 0 0 0 0-11.668.75.75 0 0 1 0-1.06Z" />
+          <path d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z" />
+        </svg>        
+      </button>
+      <button id="howToPlayBtn">?</button>
+    </div>
 
     <div id="instructionsOverlay">
        
@@ -487,6 +57,21 @@
       <p>Too many wrong guesses or too much imbalance will tip the boat and sink it.</p>
       <p>Choose a level, and enjoy the challenge!</p>
       <button id="close-instructions">Close</button>
+    </div>
+    <div id="failPopup" class="popup">
+      <div>
+        <h2>The boat has sunk!</h2>
+        <p>Do you want to play again?</p>
+      </div>
+      <button id="closeFailPopup">OK</button>
+    </div>
+    <div id="successPopup" class="popup">
+      <div>
+        <h2>Congratulations!</h2>
+        <p>You've kept the boat balanced and saved it!</p>
+        <p>Do you want to play again?</p>
+      </div>
+      <button id="closeSuccessPopup">OK</button>
     </div>
     
     <!-- BOAT CONTAINER (Scene) -->
@@ -507,8 +92,10 @@
             <span id="epithet">Voyager of </span>
             <span id="theme" style="filter: blur(5px); font-weight: normal;">[Theme]</span>
         </div>
-        <div id="word-left"></div>
-        <div id="word-right"></div>
+        <div id="word-container">
+          <div id="word-left"></div>
+          <div id="word-right"></div>
+        </div>
       </div>
     </div>
     
@@ -524,7 +111,7 @@
     
     <!-- Strike Display and Mute Button -->
     <div id="strikes">Strikes: <span id="strike-count">0</span>/3</div>
-    <button id="mute">Mute</button>
+    <!-- <button id="mute">Mute</button> -->
     <div id="game-status"></div>
   </div>
   
@@ -533,6 +120,10 @@
     <img id="seagull" src="seagull.png" alt="Seagull">
     <div id="speech-bubble">Congratulations, you saved the ship!</div>
   </div>
+  <!--- DOLPHIN JUMP-->
+  <img id="dolphin" src="dolphin.png" alt="Jumping Dolphin">
+  <audio id="splashSound" src="splashsoundtrimmed.mp3" preload="auto"></audio>
+  
   
   <!-- BUBBLES CONTAINER (for sinking animation) -->
   <div id="bubbles" style="position: absolute; left:0; bottom:0; width:100%; height:0; pointer-events:none; z-index:7;"></div>
@@ -542,351 +133,11 @@
   <audio id="wrongSound" src="wrongsound.mp3"></audio>
   <audio id="splashSound" src="Sinkingship.mp3"></audio>
   <audio id="bgSound" loop src="backgroundsound2.mp3"></audio>
-  <audio id="winSound" src="congratulationseffect.mp3"></audio>
+  <audio id="winSound" src="correctsound.mp3"></audio>
   
-  <script>
-    /**********************************************************
-     * LEVELS LIBRARY (50 variations across 3 levels)
-     **********************************************************/
-    const levels = {
-      easy: [
-        { theme: "Fruit", words: ["BANANA", "PAPAYA"] },
-        { theme: "Colors", words: ["YELLOW", "VIOLET"] },
-        { theme: "Metals", words: ["SILVER", "COPPER"] },
-        { theme: "Oceans", words: ["ARCTIC", "INDIAN"] },
-        { theme: "Animals", words: ["RABBIT", "MONKEY"] },
-        { theme: "Seasons", words: ["WINTER", "AUTUMN"] }, /**
-        { theme: "Birds", boatName: "Bird", words: ["PIGEON", "FALCON"] },
-        { theme: "Flowers", boatName: "Flower", words: ["TULIP", "DAISY"] },
-        { theme: "Rivers", boatName: "River", words: ["THAMES", "AMAZON"] },
-        { theme: "Shapes", boatName: "Shape", words: ["CIRCLE", "SQUARE"] },
-        { theme: "Planets", boatName: "Planet", words: ["SATURN", "URANUS"] },
-        { theme: "Gems", boatName: "Gem", words: ["EMERALD", "DIAMOND"] },
-        { theme: "Trees", boatName: "Tree", words: ["BIRCH", "MAPLE"] },
-        { theme: "Insects", boatName: "Insect", words: ["BEETLE", "HORNET"] },
-        { theme: "Grains", boatName: "Grain", words: ["MILLET", "BARLEY"] },
-        { theme: "Herbs", boatName: "Herb", words: ["BASIL", "THYME"] },
-        { theme: "Deserts", boatName: "Desert", words: ["SAHARA", "MOJAVE"] },
-        { theme: "Spices", boatName: "Spice", words: ["TURMERIC", "CARDAMOM"] }
-      ],
-      medium: [
-        { theme: "Fabrics", boatName: "Fabric", words: ["CORDUROY", "CASHMERE"] },
-        { theme: "Cheeses", boatName: "Cheese", words: ["RICOTTA", "CHEDDAR"] },
-        { theme: "Islands", boatName: "Island", words: ["ICELAND", "JAMAICA"] },
-        { theme: "Coffee", boatName: "Coffee", words: ["ARABICA", "ROBUSTA"] },
-        { theme: "Fish", boatName: "Fish", words: ["HERRING", "SARDINE"] },
-        { theme: "Storms", boatName: "Storm", words: ["CYCLONE", "TYPHOON"] },
-        { theme: "Mushrooms", boatName: "Mushroom", words: ["BUTTON", "OYSTER"] },
-        { theme: "Snakes", boatName: "Serpent", words: ["COTTONMOUTH", "RATTLESNAKE"] },
-        { theme: "Painters", boatName: "Painter", words: ["MATISSE", "CEZANNE"] },
-        { theme: "Dances", boatName: "Dance", words: ["FLAMENCO", "FANDANGO"] },
-        { theme: "Planets", boatName: "Cosmic", words: ["CELESTIAL", "ASTRONAUT"] },
-        { theme: "Authors", boatName: "Author", words: ["BRONTE", "AUSTEN"] },
-        { theme: "Birdsofprey", boatName: "Bird of Prey", words: ["OSPREY", "CONDOR"] },
-        { theme: "Herbs", boatName: "Herbal Hunter", words: ["OREGANO", "PARSLEY"] },
-        { theme: "Mountains", boatName: "Mountain", words: ["EVEREST", "OLYMPUS"] },
-        { theme: "Forests", boatName: "Forest", words: ["REDWOOD", "CYPRESS"] },
-        { theme: "Desserts", boatName: "Dessert", words: ["BROWNIE", "CUPCAKE"] }
-      ],
-      hard: [
-        { theme: "Greek Heroes", boatName: "Greek", words: ["HERCULES", "ACHILLES"] },
-        { theme: "Galaxies", boatName: "Galaxy", words: ["ANDROMEDA", "WHIRLPOOL"] },
-        { theme: "Wines", boatName: "Wine", words: ["RIESLING", "BORDEAUX"] },
-        { theme: "Composers", boatName: "Composer", words: ["BERLIOZ", "VIVALDI"] },
-        { theme: "Myths", boatName: "Mythic", words: ["PERSEUS", "THESEUS"] },
-        { theme: "Butterflies", boatName: "Butterfly", words: ["MONARCH", "ADMIRAL"] },
-        { theme: "Ancient Cities", boatName: "Ancient", words: ["BABYLON", "CARTHAGE"] },
-        { theme: "Reptiles", boatName: "Reptile", words: ["TERRAPIN", "TORTOISE"] },
-        { theme: "Cloud Types", boatName: "Cloud", words: ["CIRRUS", "CUMULUS"] },
-        { theme: "Philosophers", boatName: "Philosopher", words: ["SOCRATES", "DIOGENES"] },
-        { theme: "Alpine Peaks", boatName: "Alpine", words: ["MATTERHORN", "WEISSHORN"] },
-        { theme: "Playwrights", boatName: "Drama", words: ["MARLOWE", "SOPHOCLES"] },
-        { theme: "Tropical Fruit", boatName: "Tropic", words: ["AVOCADO", "TAMARIND"] },
-        { theme: "Minerals", boatName: "Stone", words: ["OBSIDIAN", "DOLOMITE"] },
-        { theme: "Astronomers", boatName: "Stellar", words: ["GALILEO", "KEPLERS"] },
-        { theme: "Languages", boatName: "Tongue", words: ["MANDARIN", "JAPANESE"] },
-        { theme: "Corals", boatName: "Coral", words: ["STAGHORN", "ELKHORNS"] },
-        { theme: "Poets", boatName: "Verse", words: ["PETRARCH", "CHAUCERS"] },
-        { theme: "Artists", boatName: "Art", words: ["REMBRANDT", "DELACROIX"] },
-        { theme: "Volcanoes", boatName: "Fire", words: ["KRAKATOA", "VESUVIUS"] }*/
-      ]
-    };
-    
-    /**********************************************************
-     * LEVEL SELECTION & GAME INITIALIZATION
-     **********************************************************/
-    let currentLevel = "easy"; // default level
-    let themesLibrary = levels[currentLevel];
-    let lastPuzzleIndex = -1;
-    
-    function initGame() {
-      // Remove any previous sink class so the boat resets
-      const boatContainer = document.getElementById('boat-container');
-      boatContainer.classList.remove('sink');
-      // Reset the boat's transform to ensure it is horizontal
-      boatContainer.style.transform = 'rotate(0deg)';
-      
-      // Clear overlays (if any)
-      document.getElementById('seagull-container').style.display = 'none';
-      document.getElementById('bubbles').innerHTML = '';
-      
-      // Choose a new puzzle index (different from the last, if possible)
-      let newIndex;
-      do {
-        newIndex = Math.floor(Math.random() * themesLibrary.length);
-      } while (themesLibrary.length > 1 && newIndex === lastPuzzleIndex);
-      lastPuzzleIndex = newIndex;
-      
-      let selectedTheme = themesLibrary[newIndex];
-      // Set the clue and code words
-      window.wordFront = selectedTheme.words[0];
-      window.wordBack = selectedTheme.words[1];
-      document.getElementById('boat-name').innerHTML =
-  '<span id="epithet">Voyager of </span>' +
-  '<span id="theme" style="filter: blur(5px); font-weight: normal;">' +
-  selectedTheme.theme +
-  '</span>';
-      // Reset guessed letters and strikes using updated global variables
-      window.frontRevealed = Array(window.wordFront.length).fill('_');
-      window.backRevealed = Array(window.wordBack.length).fill('_');
-      window.strikes = 0;
-      // Update UI
-      document.getElementById('word-left').textContent = frontRevealed.join(' ');
-      document.getElementById('word-right').textContent = backRevealed.join(' ');
-      document.getElementById('strike-count').textContent = strikes;
-      // Clear and recreate letter buttons
-      const lettersContainer = document.getElementById('letters');
-      lettersContainer.innerHTML = "";
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(letter => {
-        let btn = document.createElement('button');
-        btn.textContent = letter;
-        btn.classList.add('letter-btn');
-        btn.onclick = () => guessLetter(letter, btn);
-        lettersContainer.appendChild(btn);
-      });
-    }
-    
-    function setLevel(level) {
-      currentLevel = level;
-      themesLibrary = levels[currentLevel];
-      // Update active button appearance
-      document.getElementById('easyBtn').classList.remove('active');
-      document.getElementById('mediumBtn').classList.remove('active');
-      document.getElementById('hardBtn').classList.remove('active');
-      document.getElementById(level + "Btn").classList.add('active');
-      initGame();
-    }
-    
-    // Add event listeners to level buttons
-    document.getElementById('easyBtn').addEventListener('click', function(){ setLevel("easy"); });
-    document.getElementById('mediumBtn').addEventListener('click', function(){ setLevel("medium"); });
-    document.getElementById('hardBtn').addEventListener('click', function(){ setLevel("hard"); });
-    
-    /**********************************************************
-     * AUDIO SETUP
-     **********************************************************/
-    const correctSound = document.getElementById('correctSound');
-    correctSound.volume = 0.4;
-    const wrongSound = document.getElementById('wrongSound');
-    wrongSound.volume = 0.4;
-    const splashSound = document.getElementById('splashSound');
-    splashSound.volume = 0.4;
-    const bgSound = document.getElementById('bgSound');
-    bgSound.volume = 0.2;
-    const winSound = document.getElementById('winSound');
-    winSound.volume = 0.4;
-    
-    let bgStarted = false;
-    window.addEventListener('click', function startBG() {
-      if (!bgStarted) {
-        bgSound.play().catch(err => console.log(err));
-        bgStarted = true;
-      }
-    });
-    
-    /**********************************************************
-     * HOW TO PLAY BUTTON
-     **********************************************************/
-    /** document.getElementById('howToPlayBtn').addEventListener('click', function() {
-      alert("How to Play:\n\nGuess the letters to reveal two secret words that share a theme. Too many wrong guesses or too much imbalance will tip the boat and sink it. Choose a level, and enjoy the challenge!");
-    }); **/
-    
-    /**********************************************************
-     * UPDATE DISPLAY & BOAT TIPPING
-     **********************************************************/
-    function updateDisplay() {
-      document.getElementById('word-left').textContent = frontRevealed.join(' ');
-      document.getElementById('word-right').textContent = backRevealed.join(' ');
-      
-      let frontCount = frontRevealed.filter(l => l !== '_').length;
-      let backCount = backRevealed.filter(l => l !== '_').length;
-      let diff = frontCount - backCount;
-      let angle = 0;
-      
-      if (Math.abs(diff) === 1) {
-        angle = 5;
-      } else if (Math.abs(diff) === 2) {
-        angle = 10;
-      } else if (Math.abs(diff) >= 3) {
-        sinkBoat();
-        return;
-      }
-      
-      document.getElementById('boat-container').style.transform =
-        (diff > 0) ? `rotate(${-angle}deg)` : `rotate(${angle}deg)`;
-    }
-    
-    /**********************************************************
-     * SINK THE BOAT
-     **********************************************************/
-    function sinkBoat() {
-      document.getElementById('boat-container').classList.add('sink');
-      splashSound.play();
-      bgSound.pause();
-      createBubbles();
-      // Disable letter buttons until the player answers the popup
-      document.querySelectorAll('.letter-btn').forEach(btn => btn.disabled = true);
-      // After a delay, prompt the player to play again
-      setTimeout(() => {
-        if (confirm("The boat has sunk!\nDo you want to play again?")) {
-          initGame();
-        }
-      }, 3000);
-    }
-    
-    /**********************************************************
-     * CREATE BUBBLES ON SINK
-     **********************************************************/
-    function createBubbles() {
-      const bubblesContainer = document.getElementById('bubbles');
-      for (let i = 0; i < 10; i++) {
-        const bubble = document.createElement('div');
-        bubble.classList.add('bubble');
-        bubble.style.left = Math.random() * 100 + '%';
-        bubble.style.animationDelay = Math.random() * 2 + 's';
-        bubblesContainer.appendChild(bubble);
-      }
-      setTimeout(() => { bubblesContainer.innerHTML = ''; }, 4000);
-    }
-    
-    /**********************************************************
-     * CHECK FOR WIN
-     **********************************************************/
-    function checkWin() {
-      if (frontRevealed.join('') === wordFront && backRevealed.join('') === wordBack) {
-        bgSound.pause();
-        winSound.play();
-        showSeagull();
-      }
-    }
-    
-    /**********************************************************
-     * DISPLAY SEAGULL ANIMATION
-     **********************************************************/
-    function showSeagull() {
-      const seagullContainer = document.getElementById('seagull-container');
-      seagullContainer.style.display = 'block';
-      seagullContainer.addEventListener('animationend', function () {
-        if (confirm("Congratulations! You've kept the boat balanced and saved it!\nDo you want to play again?")) {
-          initGame();
-        }
-      });
-    }
-    
-    /**********************************************************
-     * HANDLE LETTER GUESSES
-     **********************************************************/
-    function guessLetter(letter, btn) {
-      btn.disabled = true;
-      let foundMatch = false;
-      
-      if (wordFront.includes(letter)) {
-        wordFront.split('').forEach((char, i) => {
-          if (char === letter) {
-            frontRevealed[i] = letter;
-            foundMatch = true;
-          }
-        });
-      }
-      if (wordBack.includes(letter)) {
-        wordBack.split('').forEach((char, i) => {
-          if (char === letter) {
-            backRevealed[i] = letter;
-            foundMatch = true;
-          }
-        });
-      }
-      
-      if (foundMatch) {
-        correctSound.currentTime = 0;
-        correctSound.play();
-      } else {
-        wrongSound.currentTime = 0;
-        wrongSound.play();
-        strikes++;
-        document.getElementById('strike-count').textContent = strikes;
-        if (strikes >= 3) {
-          sinkBoat();
-          return;
-        }
-      }
-      
-      updateDisplay();
-      checkWin();
-    }
-    //Instructions Overlay Logic
-    const questionMark = document.getElementById("howToPlayBtn");
-    const instructionsOverlay = document.getElementById("instructionsOverlay");
-    const closeInstructions = document.getElementById("close-instructions");
-    questionMark.addEventListener("click", () => {
-      instructionsOverlay.style.display = instructionsOverlay.style.display === "none" ? "block" : "none";
-    });
-    closeInstructions.addEventListener("click", hideInstructions);
-    function hideInstructions() {
-      instructionsOverlay.style.display = "none";
-    }
-    
-    function addKeyboardInput() {
-  document.addEventListener('keydown', function(event) {
-    // Convert the key pressed to uppercase
-    const key = event.key.toUpperCase();
-    // Only process if it's a single letter A-Z
-    if (!/^[A-Z]$/.test(key)) return;
-    
-    // Find all letter buttons and trigger a click on the matching one (if available)
-    const letterButtons = document.querySelectorAll('.letter-btn');
-    letterButtons.forEach(btn => {
-      if (btn.textContent === key && !btn.disabled) {
-        btn.click();
-      }
-    });
-  });
-}
-
-// Call the function to enable keyboard input
-addKeyboardInput();
-
-    // Initialize the game on page load using the default level
-    //* initGame(); *//
-
-   // Listen for the Play button click
-  document.getElementById("play-button").addEventListener("click", function() {
-    // Hide the landing overlay and white background overlay
-    document.getElementById("landing-overlay").style.display = "none";
-    document.getElementById("overlay-bg").style.display = "none";
-    // Show the game container
-    document.getElementById("game-container").style.display = "block";
-    // Initialize the game
-    initGame();
-    setTimeout(function() {
-  const themeSpan = document.getElementById('theme');
-  if (themeSpan) {
-    themeSpan.style.filter = 'none';
-    themeSpan.style.fontWeight = 'bold';
-  }
-}, 2000);
-  });
-  
+  <script type="module">
+   import {start} from "./js/game.js"
+  document.addEventListener('DOMContentLoaded', start);
   </script>
 </body>
 </html>

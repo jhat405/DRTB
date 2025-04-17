@@ -1,0 +1,14 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+    color: #0b3270;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* root will go here with CSS variables*/

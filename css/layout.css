@@ -1,0 +1,38 @@
+#game-container {
+    display: flex; /* Hide the game container until Play is clicked NOTE THAT THIS IS DISABLED */ 
+    width: 50%;
+    max-width: 50%;
+    height: 95%;
+    max-height: 95%;
+    background: rgb(239, 252, 255);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    padding: 25px;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  #landing-overlay {
+    /* display:none; */
+    height: 400px;
+    width: 800px;
+    max-width: 90%;
+    background: rgb(239, 252, 255);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    padding: 20px;
+    position: absolute; /* Position it relative to the body */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Make sure it sits above the game container */
+  }
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  
