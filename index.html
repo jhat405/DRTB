@@ -92,8 +92,10 @@
             <span id="epithet">Voyager of </span>
             <span id="theme" style="filter: blur(5px); font-weight: normal;">[Theme]</span>
         </div>
-        <div id="word-left"></div>
-        <div id="word-right"></div>
+        <div id="word-container">
+          <div id="word-left"></div>
+          <div id="word-right"></div>
+        </div>
       </div>
     </div>
     
@@ -118,6 +120,10 @@
     <img id="seagull" src="seagull.png" alt="Seagull">
     <div id="speech-bubble">Congratulations, you saved the ship!</div>
   </div>
+  <!--- DOLPHIN JUMP-->
+  <img id="dolphin" src="dolphin.png" alt="Jumping Dolphin">
+  <audio id="splashSound" src="splashsoundtrimmed.mp3" preload="auto"></audio>
+  
   
   <!-- BUBBLES CONTAINER (for sinking animation) -->
   <div id="bubbles" style="position: absolute; left:0; bottom:0; width:100%; height:0; pointer-events:none; z-index:7;"></div>

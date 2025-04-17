@@ -1,4 +1,4 @@
-import{addKeyboardInput, hideInstructions, sinkBoat, updateDisplay, failPopup, muteButton, successPopup} from "./dom.js"
+import{addKeyboardInput, hideInstructions, sinkBoat, updateDisplay, failPopup, muteButton, successPopup,triggerJump} from "./dom.js"
 import { levels } from "./levels.js";
 import { checkWin } from "./utils.js";
 let currentLevel = "easy"; // default level
@@ -50,6 +50,10 @@ selectedTheme.theme +
       btn.onclick = () => guessLetter(letter, btn);
       lettersContainer.appendChild(btn);
     });
+    setTimeout(function(){
+      triggerJump()
+    }, 1000
+    );
     setTimeout(function() {
       const themeSpan = document.getElementById('theme');
       if (themeSpan) {
@@ -57,6 +61,7 @@ selectedTheme.theme +
         themeSpan.style.fontWeight = 'bold';
       }
     }, 2000);
+    
   }
 
 /**********************************************************

@@ -136,8 +136,20 @@
     z-index: 3;
   }
   @keyframes bobbing {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(5px); }
+    /* 0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); } */
+    0%, 100% {
+      transform: translateY(0) rotateZ(0deg);
+    }
+    25% {
+      transform: translateY(3px) rotateZ(1deg);
+    }
+    50% {
+      transform: translateY(5px) rotateZ(0deg);
+    }
+    75% {
+      transform: translateY(3px) rotateZ(-1deg);
+    }
   }
   
   /* === BOAT (Rotating element) === */
@@ -147,6 +159,7 @@
     height: 100%;
     animation: bobbing 3s infinite ease-in-out;
     z-index: 3;
+    will-change: transform;
   }
   
   /* Hull */
@@ -234,9 +247,19 @@
   }
   
   /* Code words on the deck */
-  #word-left, #word-right {
+  #word-container {
     position: absolute;
-    bottom: 80px;
+    bottom: 81px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 65px;
+    white-space: nowrap;
+  }
+  #word-left, #word-right {
     font-size: 1.5em;
     font-weight: bold;
     color: #1e4b7e;
@@ -245,9 +268,10 @@
     padding: 2px 5px;
     border-radius: 4px;
     z-index: 5;
+    
   }
-  #word-left { left: 25%; transform: translateX(-50%); }
-  #word-right { right: 25%; transform: translateX(50%); }
+  /* #word-left { left: 25%; transform: translateX(-50%); } */
+  /* #word-right { right: 25%; transform: translateX(50%); } */
   
   /* Theme name on the hull */
   #boat-name {
@@ -308,10 +332,12 @@
   
   /* === LETTERS KEYBOARD === */
   #letters {
+    position: relative;
     margin-top: 60px;
     z-index: 6;
   }
   .letter-btn {
+    position: relative;
     width: 45px;
     height: 45px;
     margin: 5px;
@@ -323,6 +349,7 @@
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
+    z-index: 6;
   }
   .letter-btn:disabled {
     background-color: #a8a8a8;
@@ -363,6 +390,7 @@
     display: none;
     z-index: 1000;
     animation: seagullFly 7s linear forwards;
+    white-space: nowrap;
   }
   #seagull {
     width: 100px;
@@ -378,6 +406,7 @@
     font-size: 1.2em;
     font-weight: bold;
     position: relative;
+    white-space: nowrap;
   }
   #speech-bubble::after {
     content: "";
@@ -393,6 +422,35 @@
     10% { opacity: 1; }
     100% { left: calc(100% + 50px); opacity: 1; }
   }
+
+  /* === Dolphin annimation === */
+
+  #dolphin {
+    position: absolute;
+    bottom: 130px;
+    left: 48%;
+    transform: translateX(-50%);
+    height: 120px;
+    transition: transform 0.1s;
+    z-index: 2;
+    opacity: 1;
+    pointer-events: none;
+    display: none;
+  }
+  
+  /* .jump {
+    animation: arcJump  2s ease-in-out;
+  }
+  
+  @keyframes arcJump  {
+    0%   { transform: translate(-50%, 0) rotate(0deg); }
+    20%  { transform: translate(-60%, -40px) rotate(-10deg); }
+    40%  { transform: translate(-70%, -90px) rotate(-20deg); }
+    50%  { transform: translate(-75%, -100px) rotate(0deg); }
+    60%  { transform: translate(-70%, -90px) rotate(20deg); }
+    80%  { transform: translate(-60%, -40px) rotate(10deg); }
+    100% { transform: translate(-50%, 0) rotate(0deg); }
+  } */
   
   /* === BUBBLES (for sinking animation) === */
   .bubble {

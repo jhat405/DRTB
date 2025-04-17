@@ -5,7 +5,7 @@ export const levels = {
       { theme: "Metals", words: ["SILVER", "COPPER"] },
       { theme: "Oceans", words: ["ARCTIC", "INDIAN"] },
       { theme: "Animals", words: ["RABBIT", "MONKEY"] },
-      { theme: "Seasons", words: ["WINTER", "AUTUMN"] }, /**
+      { theme: "Seasons", words: ["WINTER", "AUTUMN"] }, 
       { theme: "Birds", boatName: "Bird", words: ["PIGEON", "FALCON"] },
       { theme: "Flowers", boatName: "Flower", words: ["TULIP", "DAISY"] },
       { theme: "Rivers", boatName: "River", words: ["THAMES", "AMAZON"] },
@@ -58,7 +58,7 @@ export const levels = {
       { theme: "Corals", boatName: "Coral", words: ["STAGHORN", "ELKHORNS"] },
       { theme: "Poets", boatName: "Verse", words: ["PETRARCH", "CHAUCERS"] },
       { theme: "Artists", boatName: "Art", words: ["REMBRANDT", "DELACROIX"] },
-      { theme: "Volcanoes", boatName: "Fire", words: ["KRAKATOA", "VESUVIUS"] }*/
+      { theme: "Volcanoes", boatName: "Fire", words: ["KRAKATOA", "VESUVIUS"] }
     ]
   };
   

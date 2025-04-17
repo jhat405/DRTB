@@ -73,6 +73,53 @@ export function showSeagull() {
     });
 }
 
+export function triggerJump() {
+    const dolphin = document.getElementById("dolphin");
+    const splashSound = document.getElementById("splashSound");
+  
+    const duration = 2000; // slowed down (was 1200)
+    const height = 133;
+    const distance = 250;
+
+     // Set initial transform before showing the dolphin
+    const initialX = -distance / 2;
+    const initialY = 0;
+    const initialTilt = -30;
+
+    dolphin.style.transform = `translate(${initialX}px, ${initialY}px) rotate(${initialTilt}deg)`;
+
+    const startTime = performance.now();
+  
+    // Show the dolphin
+    dolphin.style.display = 'block';
+  
+    function animate(currentTime) {
+      const elapsed = currentTime - startTime;
+      const t = Math.min(elapsed / duration, 1);
+  
+      const x = distance * (t - 0.5);
+      const y = -4 * height * t * (1 - t);
+  
+      const tilt = (t < 0.5)
+        ? -30 * (1 - t * 2)
+        : 30 * ((t - 0.5) * 2);
+  
+      dolphin.style.transform = `translate(${x}px, ${y}px) rotate(${tilt}deg)`;
+  
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        // Hide dolphin and play splash
+        dolphin.style.display = 'none';
+        dolphin.style.transform = `translate(0, 0) rotate(0deg)`;
+        splashSound.currentTime = 0;
+        splashSound.play();
+      }
+    }
+  
+    requestAnimationFrame(animate);
+  }
+
 export function hideInstructions() {
     instructionsOverlay.style.display = "none";
   }
